@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import { productsDB } from './../database/index.js';
+import db from './../database/index.js';
 // import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
 
 router
     .get('/', (req, res) => {
-        productsDB.read();
-        let products = productsDB.data.products;
+        db.read();
+        let products = db.data.products;
 
         res.status(200).json({
             stateText: 'success',
@@ -17,9 +17,9 @@ router
     .get('/:productId', (req, res) => {
         const { productID } = req.params;
 
-        productsDB.read();
+        db.read();
 
-        let products = productsDB.data.products;
+        let products = db.data.products;
 
         let foundProduct = products.find((product) => product.productId === productID);
 

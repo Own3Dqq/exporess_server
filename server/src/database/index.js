@@ -10,8 +10,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const file = join(__dirname, 'db.json');
 
-console.log(file);
-
 // Configure lowdb to write to JSONFileSync
 const adapter = new JSONFileSync(file);
 const db = new LowSync(adapter);

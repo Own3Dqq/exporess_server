@@ -8,15 +8,23 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default {
     mode: 'development',
+    devServer: {
+        compress: true,
+        port: 5500,
+        liveReload: true,
+        hot: false,
+    },
     entry: './front/src/index.js',
     output: {
-        path: resolve(__dirname, './front/dist'),
-        filename: 'bundle.js',
+        path: resolve(__dirname, 'front/dist'),
+        filename: 'bundle.[contenthash].js',
+        clean: true,
+        assetModuleFilename: 'assets/[name][ext]',
     },
     plugins: [
         new webpack.ProgressPlugin(),
         new HtmlWebpackPlugin({
-            template: resolve(__dirname, './front/dist/index.html'),
+            template: resolve(__dirname, './front/src/index.html'),
             filename: 'index.html',
             minify: true,
         }),
@@ -24,25 +32,22 @@ export default {
     module: {
         rules: [
             {
+                test: /\.html$/i,
+                loader: 'html-loader',
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: ['style-loader', 'css-loader', 'sass-loader'],
+            },
+            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
             },
-            {
-                //sass-loader & sass
-                test: /\.s[ac]ss$/i,
-                use: ['style-loader', 'css-loader', 'sass-loader'],
-            },
         ],
     },
-    // devtool: 'source-map',
-    // resolve: {
-    //     extensions: ['.tsx', '.ts', '.js'],
-    // },
-    devServer: {
-        compress: true,
-        port: 4200,
-        liveReload: true,
-        hot: false,
+    devtool: 'source-map',
+    resolve: {
+        extensions: ['.js'],
     },
 };

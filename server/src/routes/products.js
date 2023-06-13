@@ -14,7 +14,8 @@ router
             data: products,
         });
     })
-    .get('/:productId', (req, res) => {
+    .get('/:id', (req, res) => {
+        console.log(req.params);
         const { productID } = req.params;
 
         db.read();
@@ -30,5 +31,6 @@ router
             });
         }
     });
+// .delete();
 
 export default router;

@@ -1,11 +1,12 @@
 import './index.html';
 import './index.sass';
 
-let count = 0;
 const API_URL = 'http://localhost:3000/api/products';
 const LIMIT_PAGE_ITEM = 10;
 
-const testImageUrl = (event) => {
+let count = 0;
+
+/* const testImageUrl = (event) => {
     const parentElem = event.target.parentElement;
     const testerUrl = event.target.getAttribute('data-src');
     const tester = new Image();
@@ -17,7 +18,7 @@ const testImageUrl = (event) => {
         parentElem.innerHTML = `<img src="/image/no-image.png"/>`;
     };
     tester.src = testerUrl;
-};
+}; */
 
 function init() {
     const cardList = document.querySelector('.card__list');
@@ -44,14 +45,15 @@ function init() {
         }
     };
 
+    /*     data-src="${product.images[0]}"
+    onLoad="testImageUrl(event)" */
+
     const templateProductCard = (product) => {
         const template = `
         <div class="card__item" data-id="${product.id}"">
             <div class="card__image">
                 <img
-                    src="/image/Loading_icon.gif"
-                    data-src="${product.images[0]}"
-                    onLoad="testImageUrl(event)"
+                    src="${product.images[0]}"
                     style="object-fit: cover"
                 />
             </div>
@@ -75,11 +77,12 @@ function init() {
         return template;
     };
 
+    /* {product.images ? product.images[0] : '/image/no-image.png'} */
     const templateProductInformation = (product) => {
         const templateProductInfo = `
             <div class="info__item" data-id = ${product.id}>
                 <div class="info__item__category">
-                    <span>${product.category.name}</span>
+                    <span>${product.name}</span>
                 </div>
                 <div class="info__item__title">
                     <h3>${product.title}</h3>
@@ -87,8 +90,8 @@ function init() {
                 <div class="info__item__image">
     
                     <img
-                        src="${product.images ? product.images[0] : '/image/no-image.png'}"
-                        alt=""
+                        src="${product.images[0]}"
+                        alt="image"
                     />
                 </div>
     
@@ -151,7 +154,8 @@ function init() {
             }
 
             selectedProduct = await responce.json();
-            return selectedProduct;
+
+            return selectedProduct.product;
         } catch (error) {
             console.log(error);
         }
@@ -208,9 +212,8 @@ function init() {
 
         showLoader();
         let product = await getProductsData((count += 10), LIMIT_PAGE_ITEM);
-        console.log(product);
 
-        // renderProductCard(product);
+        renderProductCard(product.data);
         hideLoader();
     });
 
@@ -220,7 +223,8 @@ function init() {
     });
 
     document.addEventListener('DOMContentLoaded', async () => {
-        renderProductCard(await getProductsData(count, LIMIT_PAGE_ITEM));
+        const products = await getProductsData(count, LIMIT_PAGE_ITEM);
+        renderProductCard(products.data);
 
         hideLoader();
     });

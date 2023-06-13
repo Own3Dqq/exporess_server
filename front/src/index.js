@@ -6,7 +6,7 @@ const LIMIT_PAGE_ITEM = 10;
 
 let count = 0;
 
-/* const testImageUrl = (event) => {
+const testImageUrl = (event) => {
     const parentElem = event.target.parentElement;
     const testerUrl = event.target.getAttribute('data-src');
     const tester = new Image();
@@ -15,10 +15,10 @@ let count = 0;
         parentElem.innerHTML = `<img src="${testerUrl}"/>`;
     };
     tester.onerror = () => {
-        parentElem.innerHTML = `<img src="/image/no-image.png"/>`;
+        parentElem.innerHTML = `<img src="/assets/no-image.png"/>`;
     };
     tester.src = testerUrl;
-}; */
+};
 
 function init() {
     const cardList = document.querySelector('.card__list');
@@ -45,15 +45,18 @@ function init() {
         }
     };
 
-    /*     data-src="${product.images[0]}"
-    onLoad="testImageUrl(event)" */
+    /*    
+        src="./src/image/Loading_icon.gif"
+        data-src="${product.images[0]}
+        onLoad="testImageUrl(event)"
+    */
 
     const templateProductCard = (product) => {
         const template = `
         <div class="card__item" data-id="${product.id}"">
             <div class="card__image">
                 <img
-                    src="${product.images[0]}"
+                    src="${product.images ? product.images[0] : '/assets/no-image.png'}"
                     style="object-fit: cover"
                 />
             </div>
@@ -77,7 +80,6 @@ function init() {
         return template;
     };
 
-    /* {product.images ? product.images[0] : '/image/no-image.png'} */
     const templateProductInformation = (product) => {
         const templateProductInfo = `
             <div class="info__item" data-id = ${product.id}>
@@ -90,7 +92,7 @@ function init() {
                 <div class="info__item__image">
     
                     <img
-                        src="${product.images[0]}"
+                        src="${product.images ? product.images[0] : '/assets/no-image.png'}"
                         alt="image"
                     />
                 </div>
@@ -130,7 +132,8 @@ function init() {
         let data = null;
 
         try {
-            let responce = await fetch(`${API_URL}?offset=${offset}&limit=${limit}`);
+            // let responce = await fetch(`${API_URL}?offset=${offset}&limit=${limit}`)
+            const responce = await fetch(`${API_URL}`);
             data = await responce.json();
 
             if (responce.status !== 200) {
